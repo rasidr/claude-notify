@@ -1,0 +1,8 @@
+# Build outputs / binaries (the exe is distributed via GitHub Releases, not committed)
+notify.exe
+*.exe
+claude-icon.png
+bin/
+obj/
+.vs/
+*.user

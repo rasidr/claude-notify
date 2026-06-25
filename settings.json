@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:\\Users\\YOUR_USERNAME\\.claude\\hooks\\notify.exe",
+            "args": [],
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:\\Users\\YOUR_USERNAME\\.claude\\hooks\\notify.exe",
+            "args": ["Claude Code has finished responding"],
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
