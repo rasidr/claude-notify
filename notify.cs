@@ -4,7 +4,9 @@
 #:property Nullable=enable
 #:property ImplicitUsings=enable
 #:property RuntimeIdentifier=win-x64
-#:property PublishAot=true
+#:property SelfContained=false
+#:property PublishAot=false
+#:property PublishSingleFile=true
 #:property DebugType=none
 #:property DebugSymbols=false
 #:property SatelliteResourceLanguages=en
@@ -12,9 +14,9 @@
 // Claude Code notification hook: shows a native Windows toast when Claude needs
 // input (Notification hook) or finishes a turn (Stop hook).
 //
-// Single-file .NET 10 "file-based app" with Native AOT — project settings, icon,
-// and self-registration all live in this one file. Build from a
-// "Developer PowerShell for VS" (Native AOT needs the MSVC linker + SDK env):
+// Single-file .NET 10 "file-based app" — project settings, icon, and
+// self-registration all live in this one file. Framework-dependent build
+// (needs the .NET 9 runtime to run); a plain shell works, no dev environment.
 //   dotnet publish notify.cs -o <dir>
 //
 // Reads the hook payload (JSON) from stdin and uses its "message" field for the

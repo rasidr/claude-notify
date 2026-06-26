@@ -4,22 +4,23 @@ A tiny native Windows toast notification for [Claude Code](https://code.claude.c
 It pops a toast (with the Claude icon) when Claude **needs your input** or **finishes a turn**,
 so you don't have to watch the terminal.
 
-- **Native AOT exe (~3.7 MB), no .NET runtime required to run.**
 - Shows a real Windows toast in Action Center — not a focus-stealing dialog.
 - Self-registers a "Claude Code" identity + icon on first run (per-user, `HKCU`).
 - Suppresses the noisy idle "waiting for your input" reminder, but keeps real
   permission/input prompts and the "finished" notification.
+- **Requires the [.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0)** to run.
 
 ## Install (no build — just grab the exe)
 
-1. Download `notify.exe` from the [latest Release](../../releases/latest).
-2. Put it somewhere stable, e.g. `C:\Users\<you>\.claude\hooks\notify.exe`.
-3. Merge the hooks from [`settings.json`](./settings.json) into your
+1. Install the [.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0) if you don't have it.
+2. Download `notify.exe` from the [latest Release](../../releases/latest).
+3. Put it somewhere stable, e.g. `C:\Users\<you>\.claude\hooks\notify.exe`.
+4. Merge the hooks from [`settings.json`](./settings.json) into your
    `~/.claude/settings.json` (i.e. `C:\Users\<you>\.claude\settings.json`),
    **updating the path** in both `command` values to where you saved the exe.
    If your settings file already has a `hooks` block, add `Notification` and
    `Stop` as siblings of your existing event keys rather than replacing it.
-4. Open `/hooks` in Claude Code once (or restart) to load the new hooks.
+5. Open `/hooks` in Claude Code once (or restart) to load the new hooks.
 
 > The first time it fires, it writes its icon next to the exe and registers the
 > `Anthropic.ClaudeCode` AppUserModelID under `HKCU` so the toast shows as
@@ -32,20 +33,25 @@ directly with **no shell** — fastest, ~immediate. Exec form doesn't expand
 environment variables, so the path must be a literal absolute path. Edit it to match
 where you saved `notify.exe`.
 
+## Antivirus note
+
+This is an unsigned, low-prevalence executable, so an aggressive antivirus may
+raise a **machine-learning false positive** (e.g. Defender `Wacatac.B!ml`). It only
+reads stdin, writes one `HKCU` registry key, drops its icon, and shows a toast — the
+full source is right here in `notify.cs` so you can review or build it yourself.
+If your AV flags it, build from source or add an exclusion for where you placed it.
+
 ## Build from source
 
-Requires the **.NET 10 SDK** and the **"Desktop development with C++"** workload
-(Native AOT needs the MSVC linker + Windows SDK).
-
-Build from a **Developer PowerShell for VS** (so MSVC's `link.exe` and the SDK env
-are on PATH — a plain shell will grab the wrong `link.exe`):
+Requires the **.NET 10 SDK** (this is a "file-based app"). A plain shell works —
+no Visual Studio or dev environment needed:
 
 ```powershell
 dotnet publish notify.cs -o out
 ```
 
-This is a single-file .NET "file-based app": project settings (`#:` directives),
-the icon (inlined as base64), and the self-registration all live in `notify.cs`.
+Everything — project settings (`#:` directives), the icon (inlined as base64), and
+the self-registration — lives in the single `notify.cs` file.
 
 ## What each hook does
 
